@@ -69,6 +69,20 @@ Accepted values for `X-Cache-Bypass` (case-insensitive):
 - **True**: `"1"`, `"true"`, `"yes"`, `"on"`
 - **False**: `"0"`, `"false"`, `"no"`, `"off"`
 
+#### 🧾 Response Headers
+
+The response includes additional headers to inform clients about cache behavior:
+
+- **`X-Cache-Status`**: Indicates whether the response was served from cache.  
+  Possible values:  
+  - `HIT` – The data was served from cache.  
+  - `MISS` – Fresh data was fetched and stored in cache.
+
+- **`X-Cache-TTL`**: Shows the current cache Time-To-Live (in seconds) for the returned data.
+
+These headers help clients understand whether caching was used and how long the cached data remains valid.
+
+
 ---
 
 ## 🧑‍💻 Local Development
