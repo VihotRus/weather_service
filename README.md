@@ -112,3 +112,26 @@ Use `uvicorn` to run the app in development mode with auto-reload:
 ```bash
 uvicorn main:app --reload
 ```
+
+### 🐳 Docker
+
+This service can also be containerized with Docker for consistent deployments.
+
+Build the Docker image:
+
+```bash
+docker build -t weather-proxy-with-cache .
+```
+
+Run the container:
+
+```bash
+docker run -d --name weather-api -p 8000:8000 weather-proxy-with-cache
+```
+
+Using Docker Compose:
+```bash
+docker-compose up --build -d
+```
+
+The API will be available at http://localhost:8000.

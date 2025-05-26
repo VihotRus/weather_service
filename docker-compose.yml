@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: weather-proxy-with-cache
+    container_name: weather-api
+    ports:
+      - "8000:8000"
+    environment:
+      WEB_CONCURRENCY: 4
+    command: >
+      gunicorn main:app
+      -w ${WEB_CONCURRENCY:-1}
+      -k uvicorn.workers.UvicornWorker
+      --bind 0.0.0.0:8000
+      --log-level info
+    restart: unless-stopped
