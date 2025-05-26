@@ -19,7 +19,11 @@ def cache(key_field: str) -> Callable:
 
     def decorator(func: Callable) -> Callable:
         @wraps(func)
-        async def wrapper(object_: CacheService, *args, **kwargs):
+        async def wrapper(
+            object_: CacheService, *args, **kwargs
+        ) -> tuple[int, bool, dict]:
+            cache_ttl = 0  # default cache Time to Live as zero
+            cache_hit = False
             if object_.cache_bypass:
                 response = await func(object_, *args, **kwargs)
             else:
@@ -30,15 +34,16 @@ def cache(key_field: str) -> Callable:
                         "Incorrect cache key field setup",
                         HTTPResponseCode.INTERNAL_SERVER_ERROR.value,
                     )
-                cached_data = await object_.cache_backend.get(key)
+                cache_ttl, cached_data = await object_.cache_backend.get_with_ttl(key)
                 if cached_data:
                     response = json.loads(cached_data.decode())
+                    cache_hit = True
                 else:
                     response = await func(object_, *args, **kwargs)
                     await object_.cache_backend.set(
                         key, json.dumps(response).encode(), expire=object_.cache_ttl
                     )
-            return response
+            return cache_ttl, cache_hit, response
 
         return wrapper
 
