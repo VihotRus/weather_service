@@ -55,11 +55,13 @@ class CacheService:
         header_cache_ttl = request.headers.get("X-Cache-TTL")
         if header_cache_ttl:
             header_cache_ttl = self._parse_cache_ttl_header(header_cache_ttl)
-        self._cache_ttl = header_cache_ttl or cache_request.ttl or DEFAULT_CACHE_TTL
+        self._cache_ttl = (
+            header_cache_ttl or cache_request.cache_ttl or DEFAULT_CACHE_TTL
+        )
         header_cache_bypass = request.headers.get("X-Cache-Bypass")
         if header_cache_bypass:
             header_cache_bypass = self._parse_cache_bypass_header(header_cache_bypass)
-        self._cache_bypass = header_cache_bypass or cache_request.bypass
+        self._cache_bypass = header_cache_bypass or cache_request.cache_bypass
         if self._cache_ttl > MAX_CACHE_TTL:
             self._log.warning(
                 "Cache TTL exceeds maximum allowed value, updated to %s", MAX_CACHE_TTL

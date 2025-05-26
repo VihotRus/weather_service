@@ -6,5 +6,5 @@ from pydantic import BaseModel, PositiveInt
 
 
 class CacheRequest(BaseModel):
-    ttl: Optional[PositiveInt] = None
-    bypass: Optional[bool] = None
+    cache_ttl: Optional[PositiveInt] = None
+    cache_bypass: Optional[bool] = None
